@@ -10,6 +10,7 @@ namespace RedBlueGames.ObjectFsm.Tests
         {
             public int NumTimesEntered {get; set;}
             public int NumTimesExited {get; set;}
+            public int NumTimesUpdated {get; set;}
                 
             public void Enter()
             {
@@ -23,17 +24,19 @@ namespace RedBlueGames.ObjectFsm.Tests
 
             public void Update(float deltaTime)
             {
-                
+                NumTimesUpdated++;
             }
         }
 
         [Test]
-        public void Ctor_DoesNotEnterInitialState()
+        public void Ctor_StartsInInitialStateWithoutEnter()
         {
             var fakeStateA = new FakeState();
-            var stateMachine = new StateMachine(fakeStateA);
+            var stateMachine = new StateMachine(this, fakeStateA);
+            stateMachine.Update(0.0f);
 
             Assert.That(fakeStateA.NumTimesEntered, Is.EqualTo(0));
+            Assert.That(fakeStateA.NumTimesUpdated, Is.EqualTo(1));
         }
 
         [Test]
@@ -41,7 +44,7 @@ namespace RedBlueGames.ObjectFsm.Tests
         {
             var fakeStateA = new FakeState();
             var fakeStateB = new FakeState();
-            var stateMachine = new StateMachine(fakeStateA);
+            var stateMachine = new StateMachine(this, fakeStateA);
             stateMachine.ChangeState(fakeStateB);
 
             Assert.That(fakeStateA.NumTimesExited, Is.EqualTo(1));

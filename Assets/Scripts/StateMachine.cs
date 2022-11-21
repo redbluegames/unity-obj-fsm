@@ -3,10 +3,12 @@ namespace RedBlueGames.ObjectFsm
     public class StateMachine
     {
         private IState currentState;
+        private object user;
 
-        public StateMachine(IState initialState)
+        public StateMachine(object user, IState initialState)
         {
-            currentState = initialState;
+            this.currentState = initialState;
+            this.user = user;
         }
 
         public void Update(float deltaTime)
